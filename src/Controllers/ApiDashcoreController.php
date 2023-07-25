@@ -5,7 +5,7 @@ namespace Goldfinch\Dashcore\Controllers;
 use SilverStripe\Security\Security;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\HTTPRequest;
-use Goldfinch\Dashcore\Services\PanelService;
+use Goldfinch\Dashcore\Services\DashService;
 
 class ApiDashcoreController extends Controller
 {
@@ -81,7 +81,7 @@ class ApiDashcoreController extends Controller
     public function infoComposer()
     {
         // 2) Composer installed packages
-        $installedPackages = PanelService::getComposerInstalledPackageList();
+        $installedPackages = DashService::getComposerInstalledPackageList();
 
         return json_encode($installedPackages);
     }
@@ -89,13 +89,13 @@ class ApiDashcoreController extends Controller
     public function infoTable()
     {
         // 1) Assets folder size
-        $assetsSize = PanelService::getAssetsSize();
+        $assetsSize = DashService::getAssetsSize();
 
         // 3) Server data
-        $serverData = PanelService::getServerData();
+        $serverData = DashService::getServerData();
 
         // 4) SilverStripe version
-        $ss = PanelService::getSilverStripeVersion();
+        $ss = DashService::getSilverStripeVersion();
 
         // 5) Mysql Size / amount of tables
         // - TODO
@@ -152,9 +152,9 @@ class ApiDashcoreController extends Controller
         // PENDING,BUILDING,IN_PROGRESS
 
         return json_encode([
-          'commits' => PanelService::getGitCommits(10),
-          'branches' => PanelService::getGitBranches(),
-          'mainbranch' => PanelService::getGitCurrentBranch(),
+          'commits' => DashService::getGitCommits(10),
+          'branches' => DashService::getGitBranches(),
+          'mainbranch' => DashService::getGitCurrentBranch(),
         ]);
     }
 
