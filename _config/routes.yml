@@ -1,0 +1,10 @@
+---
+Name: goldfinch-dashcore-routes
+After:
+  - '#rootroutes'
+  - '#coreroutes'
+---
+
+SilverStripe\Control\Director:
+  rules:
+    'api/dashcore': Goldfinch\Dashcore\Controllers\ApiDashcoreController
