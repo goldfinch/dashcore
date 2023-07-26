@@ -9,6 +9,13 @@
     "authors": [{
         "name": "Artem Karasev"
     }],
+    "require": {
+        "php": ">=8.0",
+        "silverstripe/framework": "^5.0",
+        "silverstripe/admin": "^2.0",
+        "slowprog/composer-copy-file": "~0.3",
+        "twbs/bootstrap-icons": "^1"
+    },
     "scripts": {
         "post-install-cmd": [
             "SlowProg\\CopyFile\\ScriptHandler::copy"
@@ -16,13 +23,6 @@
         "post-update-cmd": [
             "SlowProg\\CopyFile\\ScriptHandler::copy"
         ]
-    },
-    "require": {
-        "php": ">=8.0",
-        "silverstripe/framework": "^5.0",
-        "silverstripe/admin": "^2.0",
-        "slowprog/composer-copy-file": "~0.3",
-        "twbs/bootstrap-icons": "^1"
     },
     "autoload": {
         "psr-4": {
