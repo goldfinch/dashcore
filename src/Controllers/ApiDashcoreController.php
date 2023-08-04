@@ -2,7 +2,10 @@
 
 namespace Goldfinch\Dashcore\Controllers;
 
+use Carbon\Carbon;
+use SilverStripe\Control\Director;
 use SilverStripe\Security\Security;
+use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\HTTPRequest;
 use Goldfinch\Dashcore\Services\DashService;
@@ -31,6 +34,8 @@ class ApiDashcoreController extends Controller
 
         'POST info/user' => 'infoUser',
         'POST info/composer' => 'infoComposer',
+
+        'POST info/sitetree' => 'infoSitetree',
     ];
 
     private static $allowed_actions = [
@@ -52,6 +57,8 @@ class ApiDashcoreController extends Controller
 
         'infoComposer',
         'infoUser',
+
+        'infoSitetree',
     ];
 
     protected function init()
@@ -59,6 +66,32 @@ class ApiDashcoreController extends Controller
         parent::init();
 
         // ..
+    }
+
+    public function infoSitetree()
+    {
+        $list = [];
+
+        foreach(SiteTree::get()->sort('LastEdited', 'DESC')->limit(5) as $item)
+        {
+            $lastversion = $item->get_latest_version($item->ClassName, $item->ID);
+
+            $list[] = [
+              'icon' => $item->getIconClass(),
+              'title' => $item->Title,
+              'link' => $item->CMSEditLink(),
+              'author' => $lastversion->Author() ? $lastversion->Author()->getName() : null,
+              'updated_at' => Carbon::parse($item->LastEdited)->format('l, F jS Y, H:i'),
+              'updated_at_human' => Carbon::parse($item->LastEdited)->diffForHumans(),
+            ];
+        }
+
+        $data = [
+          'list' => $list,
+          'add_link' => '',
+        ];
+
+        return json_encode($data);
     }
 
     public function infoUser()
