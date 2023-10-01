@@ -217,6 +217,13 @@ class DashService
             }
 
             $firstVersion = Versioned::get_version($object->ClassName, $object->ID, 1);
+
+            // ? added here because it cause errors on request of to missing assets (like fonts, woff woff2)
+            if (!$firstVersion)
+            {
+                return null;
+            }
+
             $lastVersion = Versioned::get_latest_version($object->ClassName, $object->ID);
 
             return [
