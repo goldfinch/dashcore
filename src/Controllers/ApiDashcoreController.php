@@ -121,10 +121,30 @@ class ApiDashcoreController extends Controller
 
         $list[] = [
           'label' => 'Main domain',
-          'value' => $_SERVER['SERVER_NAME'],
+          'value' => Director::host(),
         ];
 
-        $dns = dns_get_record($_SERVER['SERVER_NAME']);
+        $list[] = [
+          'label' => 'Server email',
+          'value' => $_SERVER['SERVER_ADMIN'],
+        ];
+
+        $list[] = [
+          'label' => 'Total assets size',
+          'value' => DashService::getAssetsSize() . 'M',
+        ];
+
+        $list[] = [
+          'label' => 'Allocated php memory',
+          'value' => round(memory_get_usage() / 1000000, 2) . 'M',
+        ];
+
+        $list[] = [
+          'label' => 'Total disk',
+          'value' => round((disk_total_space('/') / 1000000) / 1000, 2) . 'G',
+        ];
+
+        $dns = dns_get_record(Director::host());
 
         if (!empty($dns))
         {
@@ -160,7 +180,7 @@ class ApiDashcoreController extends Controller
 
         $list[] = [
           'label' => 'Max execution time',
-          'value' => ini_get('max_execution_time'),
+          'value' => ini_get('max_execution_time') . 's',
         ];
 
         $list[] = [
