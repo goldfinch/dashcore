@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use ReflectionMethod;
 use SilverStripe\ORM\DB;
 use SilverStripe\Assets\File;
+use SilverStripe\Assets\Folder;
 use SilverStripe\Dev\Deprecation;
 use SilverStripe\Control\Director;
 use SilverStripe\Core\Environment;
@@ -218,6 +219,11 @@ class ApiDashcoreController extends Controller
 
         foreach(File::get()->sort('LastEdited', 'DESC')->limit(5) as $item)
         {
+            if (get_class($item) === Folder::class)
+            {
+                continue;
+            }
+
             if (!$item || !$item->exists()) {
                 return null;
             }
@@ -227,7 +233,12 @@ class ApiDashcoreController extends Controller
 
             if (method_exists($item, 'FitMax'))
             {
-                $icon = $item->FitMax(352, 264)->getURL();
+                $icon = $item->FitMax(352, 264);
+
+                if ($icon)
+                {
+                    $icon = $icon->getURL();
+                }
 
                 $r = new ReflectionMethod(ImageFormFactory::class, 'getSpecsMarkup');
                 $r->setAccessible(true);
