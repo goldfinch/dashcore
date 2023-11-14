@@ -217,7 +217,7 @@ class ApiDashcoreController extends Controller
     {
         $list = [];
 
-        foreach(File::get()->sort('LastEdited', 'DESC')->limit(5) as $item)
+        foreach(File::get()->sort('LastEdited', 'DESC')->limit(10) as $item)
         {
             if (get_class($item) === Folder::class)
             {
@@ -343,6 +343,11 @@ class ApiDashcoreController extends Controller
 
     public function infoComposer()
     {
+        if (!$this->isAdmin())
+        {
+            return null;
+        }
+
         // 2) Composer installed packages
         $installedPackages = DashService::getComposerInstalledPackageList();
 
@@ -404,6 +409,11 @@ class ApiDashcoreController extends Controller
 
     public function infoGit()
     {
+        if (!$this->isAdmin())
+        {
+            return null;
+        }
+
         /**
          * - last commit, ref, date, author
          * - bitbucket pipelines status (last commit, date, author)
@@ -482,5 +492,12 @@ class ApiDashcoreController extends Controller
         /**
          * -
          */
+    }
+
+    private function isAdmin()
+    {
+        $user = Security::getCurrentUser();
+
+        return $user->Email == Environment::getEnv('SS_DEFAULT_ADMIN_USERNAME');
     }
 }
