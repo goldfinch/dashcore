@@ -100,6 +100,31 @@ class ApiDashcoreController extends Controller
           'value' => DB::get_conn()->getVersion(),
         ];
 
+        $count = DB::query('SELECT TABLE_SCHEMA AS DB_Name, count(TABLE_SCHEMA) AS Total_Tables, SUM(TABLE_ROWS) AS Total_Tables_Row, ROUND(sum(data_length + index_length)/1024/1024) AS Total_DB_size, ROUND(sum( data_free )/ 1024 / 1024) AS Total_Free_Space FROM information_schema.TABLES WHERE TABLE_SCHEMA = \'' . ss_env('SS_DATABASE_NAME') . '\' GROUP BY TABLE_SCHEMA;');
+
+        $list[] = [
+          'label' => 'MySQL - Total tables row',
+          'value' => current($count->column('Total_Tables')),
+        ];
+
+        $list[] = [
+          'label' => 'MySQL - Total tables',
+          'value' => current($count->column('Total_Tables_Row')),
+        ];
+
+        $list[] = [
+          'label' => 'MySQL - DB size',
+          'value' => current($count->column('Total_DB_size')) . 'M',
+        ];
+
+        if (current($count->column('Total_Free_Space')) != 0)
+        {
+            $list[] = [
+              'label' => 'MySQL - Free Space',
+              'value' => current($count->column('Total_Free_Space')) . 'M',
+            ];
+        }
+
         $list[] = [
           'label' => 'Timezone',
           'value' => date_default_timezone_get(),
@@ -133,6 +158,11 @@ class ApiDashcoreController extends Controller
         $list[] = [
           'label' => 'Total assets size',
           'value' => DashService::getAssetsSize() . 'M',
+        ];
+
+        $list[] = [
+          'label' => 'Vendor size',
+          'value' => DashService::getVendorSize() . 'M',
         ];
 
         $list[] = [

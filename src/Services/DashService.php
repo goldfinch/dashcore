@@ -35,6 +35,26 @@ class DashService
     }
 
     /**
+     * Gets the size of vendor folder
+     */
+
+    public static function getVendorSize(): string
+    {
+        $f = BASE_PATH . '/vendor/';
+
+        $assetsSize = 0;
+        foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($f)) as $file) {
+            try {
+              $assetsSize += $file->getSize();
+            } catch (\RuntimeException $ex) {
+              //
+            }
+        }
+
+        return round($assetsSize / 1000000, 2);
+    }
+
+    /**
      * Gets list of installed composer packages
      */
     public static function getComposerInstalledPackageList(): array
