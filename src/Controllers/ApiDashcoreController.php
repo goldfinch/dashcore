@@ -286,6 +286,10 @@ class ApiDashcoreController extends Controller
                 {
                     $icon = $item->getUrl();
                 }
+                else
+                {
+                    $icon = 'https://placehold.co/352x264/3b4960/FFF?font=open-sans&text=.' . $item->getExtension();
+                }
             }
 
             $title = DBText::create();
