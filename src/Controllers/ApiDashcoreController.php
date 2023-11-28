@@ -85,89 +85,94 @@ class ApiDashcoreController extends Controller
 
     public function infoServer()
     {
-        $list = [];
+        $list = [
+          'php' => ['label' => 'PHP'],
+          'mysql' => ['label' => 'MySQL'],
+          'other' => ['label' => 'Server'],
+          'site' => ['label' => 'Site'],
+        ];
 
-        $list[] = [
-          'label' => 'PHP',
+        $list['php']['list'][] = [
+          'label' => 'Version',
           'value' => phpversion(),
         ];
 
-        $list[] = [
-          'label' => 'MySQL',
+        $list['mysql']['list'][] = [
+          'label' => 'Version',
           'value' => DB::get_conn()->getVersion(),
         ];
 
         $count = DB::query('SELECT TABLE_SCHEMA AS DB_Name, count(TABLE_SCHEMA) AS Total_Tables, SUM(TABLE_ROWS) AS Total_Tables_Row, ROUND(sum(data_length + index_length)/1024/1024) AS Total_DB_size, ROUND(sum( data_free )/ 1024 / 1024) AS Total_Free_Space FROM information_schema.TABLES WHERE TABLE_SCHEMA = \'' . ss_env('SS_DATABASE_NAME') . '\' GROUP BY TABLE_SCHEMA;');
 
-        $list[] = [
-          'label' => 'MySQL - Total tables row',
+        $list['mysql']['list'][] = [
+          'label' => 'Total tables row',
           'value' => current($count->column('Total_Tables')),
         ];
 
-        $list[] = [
-          'label' => 'MySQL - Total tables',
+        $list['mysql']['list'][] = [
+          'label' => 'Total tables',
           'value' => current($count->column('Total_Tables_Row')),
         ];
 
-        $list[] = [
-          'label' => 'MySQL - DB size',
+        $list['mysql']['list'][] = [
+          'label' => 'DB size',
           'value' => current($count->column('Total_DB_size')) . 'M',
         ];
 
         if (current($count->column('Total_Free_Space')) != 0)
         {
-            $list[] = [
-              'label' => 'MySQL - Free Space',
+            $list['mysql']['list'][] = [
+              'label' => 'Free Space',
               'value' => current($count->column('Total_Free_Space')) . 'M',
             ];
         }
 
-        $list[] = [
+        $list['php']['list'][] = [
           'label' => 'Timezone',
           'value' => date_default_timezone_get(),
         ];
 
-        $list[] = [
-          'label' => 'SS',
+        $list['site']['list'][] = [
+          'label' => 'SS version',
           'value' => LeftAndMain::singleton()->CMSVersionNumber(),
         ];
 
-        $list[] = [
-          'label' => 'SS environment',
+        $list['site']['list'][] = [
+          'label' => 'Environment',
           'value' => Environment::getEnv('SS_ENVIRONMENT_TYPE'),
         ];
 
-        $list[] = [
+        $list['other']['list'][] = [
           'label' => 'Server IP',
           'value' => $_SERVER['SERVER_ADDR'],
         ];
 
-        $list[] = [
+        $list['other']['list'][] = [
           'label' => 'Main domain',
           'value' => Director::host(),
         ];
 
-        $list[] = [
+        $list['other']['list'][] = [
           'label' => 'Server email',
           'value' => $_SERVER['SERVER_ADMIN'],
         ];
 
-        $list[] = [
+        $list['site']['list'][] = [
           'label' => 'Total assets size',
           'value' => DashService::getAssetsSize() . 'M',
         ];
 
-        $list[] = [
+        $list['site']['list'][] = [
           'label' => 'Vendor size',
           'value' => DashService::getVendorSize() . 'M',
         ];
 
-        $list[] = [
+        $list['php']['list'][] = [
           'label' => 'Allocated php memory',
           'value' => round(memory_get_usage() / 1000000, 2) . 'M',
         ];
 
-        $list[] = [
+        $list['site']['list'][] = [
           'label' => 'Total disk',
           'value' => round((disk_total_space('/') / 1000000) / 1000, 2) . 'G',
         ];
@@ -190,35 +195,35 @@ class ApiDashcoreController extends Controller
 
             $dnsString = substr($dnsString, 0, -2);
 
-            $list[] = [
+            $list['other']['list'][] = [
               'label' => 'DNS Server',
               'value' => $dnsString,
             ];
         }
 
-        $list[] = [
+        $list['php']['list'][] = [
           'label' => 'Memory limit',
           'value' => ini_get('memory_limit'),
         ];
 
-        $list[] = [
+        $list['php']['list'][] = [
           'label' => 'Upload max filesize',
           'value' => ini_get('upload_max_filesize'),
         ];
 
-        $list[] = [
+        $list['php']['list'][] = [
           'label' => 'Max execution time',
           'value' => ini_get('max_execution_time') . 's',
         ];
 
-        $list[] = [
+        $list['php']['list'][] = [
           'label' => 'Post max size',
           'value' => ini_get('post_max_size'),
         ];
 
         if (ini_get('display_errors'))
         {
-            $list[] = [
+            $list['php']['list'][] = [
               'label' => 'Display errors',
               'value' => ini_get('display_errors'),
             ];
@@ -226,7 +231,7 @@ class ApiDashcoreController extends Controller
 
         if (ini_get('expose_php'))
         {
-            $list[] = [
+            $list['php']['list'][] = [
               'label' => 'Expose php',
               'value' => ini_get('expose_php'),
             ];
