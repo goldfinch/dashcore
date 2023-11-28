@@ -7,17 +7,14 @@ use ReflectionMethod;
 use SilverStripe\ORM\DB;
 use SilverStripe\Assets\File;
 use SilverStripe\Assets\Folder;
-use SilverStripe\Dev\Deprecation;
 use SilverStripe\Control\Director;
 use SilverStripe\Core\Environment;
 use SilverStripe\Admin\LeftAndMain;
 use SilverStripe\Security\Security;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Controller;
-use SilverStripe\Core\Config\Config;
-use SilverStripe\Control\HTTPRequest;
+use SilverStripe\ORM\FieldType\DBText;
 use DNADesign\Elemental\Models\BaseElement;
-use SilverStripe\ORM\Connect\MySQLDatabase;
 use Goldfinch\Dashcore\Services\DashService;
 use SilverStripe\AssetAdmin\Forms\FileFormFactory;
 use SilverStripe\AssetAdmin\Forms\ImageFormFactory;
@@ -283,10 +280,22 @@ class ApiDashcoreController extends Controller
                 $fileSpecs = $r->invoke(new FileFormFactory(), $item);
             }
 
+            if (!$icon)
+            {
+                if ($item->getExtension() == 'svg')
+                {
+                    $icon = $item->getUrl();
+                }
+            }
+
+            $title = DBText::create();
+            $title->setValue($item->Title);
+
             $list[] = [
               'icon' => $icon,
               'specs' => $fileSpecs,
-              'title' => $item->Title,
+              'title' => $title->LimitCharacters(18),
+              'full_title' => $item->Title,
               'link' => $item->CMSEditLink(),
               'author' => $lastversion->Author() ? $lastversion->Author()->getName() : null,
               'updated_at' => Carbon::parse($item->LastEdited)->format('l, F jS Y, H:i'),
