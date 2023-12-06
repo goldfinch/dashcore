@@ -177,7 +177,7 @@ class ApiDashcoreController extends Controller
           'value' => round((disk_total_space('/') / 1000000) / 1000, 2) . 'G',
         ];
 
-        $dns = dns_get_record(Director::host());
+        $dns = @dns_get_record(Director::host());
 
         if (!empty($dns))
         {

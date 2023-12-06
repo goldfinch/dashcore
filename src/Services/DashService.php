@@ -78,7 +78,7 @@ class DashService
     public static function getServerData(): array
     {
         $data = [
-            'dns' => dns_get_record(Director::host()),
+            'dns' => @dns_get_record(Director::host()),
 
             'disk_total' => round((disk_total_space('/') / 1000000) / 1000, 2), // gb
             'timezone' => date_default_timezone_get(),
