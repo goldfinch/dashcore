@@ -324,18 +324,21 @@ class ApiDashcoreController extends Controller
     {
         $list = [];
 
-        foreach(BaseElement::get()->sort('LastEdited', 'DESC')->limit(5) as $item)
+        if (class_exists(BaseElement::class))
         {
-            $lastversion = $item->get_latest_version($item->ClassName, $item->ID);
+            foreach(BaseElement::get()->sort('LastEdited', 'DESC')->limit(5) as $item)
+            {
+                $lastversion = $item->get_latest_version($item->ClassName, $item->ID);
 
-            $list[] = [
-              'icon' => trim($item->getIcon()->RAW()),
-              'title' => $item->Title,
-              'link' => $item->CMSEditLink(),
-              'author' => $lastversion->Author() ? $lastversion->Author()->getName() : null,
-              'updated_at' => Carbon::parse($item->LastEdited)->format('l, F jS Y, H:i'),
-              'updated_at_human' => Carbon::parse($item->LastEdited)->diffForHumans(),
-            ];
+                $list[] = [
+                  'icon' => trim($item->getIcon()->RAW()),
+                  'title' => $item->Title,
+                  'link' => $item->CMSEditLink(),
+                  'author' => $lastversion->Author() ? $lastversion->Author()->getName() : null,
+                  'updated_at' => Carbon::parse($item->LastEdited)->format('l, F jS Y, H:i'),
+                  'updated_at_human' => Carbon::parse($item->LastEdited)->diffForHumans(),
+                ];
+            }
         }
 
         $data = [
