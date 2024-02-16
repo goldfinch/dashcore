@@ -14,6 +14,7 @@ use SilverStripe\Security\Security;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Controller;
 use SilverStripe\ORM\FieldType\DBText;
+use Goldfinch\Dashboard\DashboardPanel;
 use DNADesign\Elemental\Models\BaseElement;
 use Goldfinch\Dashcore\Services\DashService;
 use SilverStripe\AssetAdmin\Forms\FileFormFactory;
@@ -22,6 +23,8 @@ use SilverStripe\AssetAdmin\Forms\ImageFormFactory;
 class ApiDashcoreController extends Controller
 {
     private static $url_handlers = [
+        'POST fetch/panels' => 'fetchPanels',
+
         'POST dev/tasks' => 'devTasks',
         'POST dev/build' => 'devBuild',
         'POST info/table' => 'infoTable',
@@ -51,6 +54,8 @@ class ApiDashcoreController extends Controller
     ];
 
     private static $allowed_actions = [
+        'fetchPanels',
+
         'devTasks',
         'infoTable',
         'searchPage',
@@ -75,13 +80,6 @@ class ApiDashcoreController extends Controller
         'infoSitassets',
         'infoServer',
     ];
-
-    protected function init()
-    {
-        parent::init();
-
-        // ..
-    }
 
     public function infoServer()
     {
@@ -238,6 +236,25 @@ class ApiDashcoreController extends Controller
         $data = [
             'list' => $list,
             'add_link' => '',
+        ];
+
+        return json_encode($data);
+    }
+
+    public function fetchPanels()
+    {
+        $registered_panels = DashboardPanel::config()->get('registered_panels');
+
+        $html = '';
+
+        foreach ($registered_panels as $class) {
+            $panel = new $class();
+
+            $html .= $panel->run()->RAW();
+        }
+
+        $data = [
+            'cards' => $html,
         ];
 
         return json_encode($data);

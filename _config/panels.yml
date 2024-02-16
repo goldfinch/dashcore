@@ -1,0 +1,6 @@
+---
+Name: goldfinch-dashboard-panels
+---
+Goldfinch\Dashboard\DashboardPanel:
+  registered_panels:
+    - Goldfinch\Dashcore\Panels\SiteTreePanel
