@@ -2,9 +2,10 @@
 
 namespace Goldfinch\Dashcore\Services;
 
+use Carbon\Carbon;
 use Composer\InstalledVersions;
-use SilverStripe\Core\Environment;
 use SilverStripe\Control\Director;
+use SilverStripe\Core\Environment;
 use SilverStripe\Security\Security;
 use SilverStripe\Control\Controller;
 use SilverStripe\Versioned\Versioned;
@@ -139,10 +140,13 @@ class DashService
 
                 $list[] = [
                     'hash' => $commit[0],
+                    'hashShort' => substr($commit[0], 0, 7),
                     'commit' => $commit[1],
                     'author' => $commit[2],
                     'email' => $commit[3],
                     'date' => $commit[4],
+                    'dateFull' => Carbon::parse($commit[4])->format('l, F jS Y, H:i'),
+                    'dateNow' => Carbon::parse($commit[4])->diffForHumans(),
                 ];
             }
 

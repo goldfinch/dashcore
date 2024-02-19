@@ -15,6 +15,16 @@ class SiteTreePanel extends DashboardPanel
 
     protected $panel_position = 1;
 
+    protected $panel_extra_class = 'dashcard dashcard--sitetree';
+
+    protected $panel_actions = [
+        [
+            'title' => 'Add new page',
+            'link' => '/admin/pages/add',
+            'icon' => 'bi bi-plus-square-fill',
+        ],
+    ];
+
     public function process(): array
     {
         $list = [];
