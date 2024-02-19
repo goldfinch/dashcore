@@ -11,9 +11,9 @@ class ElementAreaPanel extends DashboardPanel
 {
     protected $panel_header = 'Blocks (elementals)';
 
-    protected $panel_cols = 12;
+    protected $panel_cols = 6;
 
-    protected $panel_position = 3;
+    protected $panel_position = 2;
 
     protected $panel_extra_class = 'dashcard dashcard--sitetree';
 

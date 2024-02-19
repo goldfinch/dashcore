@@ -24,7 +24,7 @@
   <tr>
     <td>$author</td>
     <td>
-      <a href="#{$hash}">$hashShort</a>
+      <a href="#{$hash}" target="_blank">$hashShort</a>
     </td>
     <td>$commit</td>
     <td title="$dateFull">$dateNow</td>

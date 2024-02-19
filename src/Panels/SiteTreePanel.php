@@ -11,7 +11,7 @@ class SiteTreePanel extends DashboardPanel
 {
     protected $panel_header = 'Pages';
 
-    protected $panel_cols = 12;
+    protected $panel_cols = 6;
 
     protected $panel_position = 1;
 

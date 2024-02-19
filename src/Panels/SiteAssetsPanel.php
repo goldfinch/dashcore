@@ -19,7 +19,7 @@ class SiteAssetsPanel extends DashboardPanel
 
     protected $panel_cols = 12;
 
-    protected $panel_position = 4;
+    protected $panel_position = 5;
 
     protected $panel_extra_class = 'dashcard dashcard--assets';
 

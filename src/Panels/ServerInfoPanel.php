@@ -15,9 +15,9 @@ class ServerInfoPanel extends DashboardPanel
 {
     protected $panel_header = 'Info desk';
 
-    protected $panel_cols = 12;
+    protected $panel_cols = 8;
 
-    protected $panel_position = 2;
+    protected $panel_position = 3;
 
     protected $panel_extra_class = 'dashcard dashcard--sitetree';
 
