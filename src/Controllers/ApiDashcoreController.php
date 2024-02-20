@@ -41,12 +41,13 @@ class ApiDashcoreController extends Controller
         $defaultAdmin = $user->Email == Environment::getEnv('SS_DEFAULT_ADMIN_USERNAME');
 
         foreach ($cfg->Panels() as $panel) {
+            if ($panel != DashboardPanel::class) {
+                if ($panel->isDev() && !$defaultAdmin) {
+                    continue;
+                }
 
-            if ($panel->isDev() && !$defaultAdmin) {
-                continue;
+                $html .= $panel->run()->RAW();
             }
-
-            $html .= $panel->run()->RAW();
         }
 
         $data = [
