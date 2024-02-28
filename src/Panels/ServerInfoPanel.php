@@ -98,10 +98,13 @@ class ServerInfoPanel extends DashboardPanel
             'value' => Director::host(),
         ]));
 
-        $otherList->push(ArrayData::create([
-            'label' => 'Server email',
-            'value' => $_SERVER['SERVER_ADMIN'],
-        ]));
+        // ! causing errors in production
+        // if (isset($_SERVER['SERVER_ADMIN'])) {
+        //     $otherList->push(ArrayData::create([
+        //         'label' => 'Server email',
+        //         'value' => $_SERVER['SERVER_ADMIN'],
+        //     ]));
+        // }
 
         $siteList->push(ArrayData::create([
             'label' => 'Total assets size',

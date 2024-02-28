@@ -31,10 +31,22 @@ class GitPanel extends DashboardPanel
         // curl -X GET -u bitbucket_username:app_password "https://api.bitbucket.org/2.0/repositories/<workspace>/<repository>/pipelines/?status=PENDING&status=BUILDING&status=IN_PROGRESS"
         // PENDING,BUILDING,IN_PROGRESS
 
+        // TODO: disable panel if .git does not exists
+
+        if (DashService::getGitCurrentBranch()) {
+            $commits = ArrayList::create(DashService::getGitCommits(10));
+            $branches = DashService::getGitBranches();
+            $mainbranch = DashService::getGitCurrentBranch();
+        } else {
+            $commits = [];
+            $branches = [];
+            $mainbranch = '-';
+        }
+
         return [
-            'commits' => ArrayList::create(DashService::getGitCommits(10)),
-            'branches' => DashService::getGitBranches(),
-            'mainbranch' => DashService::getGitCurrentBranch(),
+            'commits' => $commits,
+            'branches' => $branches,
+            'mainbranch' => $mainbranch,
         ];
     }
 }

@@ -5,6 +5,7 @@ namespace Goldfinch\Dashcore\Panels;
 use Carbon\Carbon;
 use SilverStripe\ORM\ArrayList;
 use Goldfinch\Dashboard\DashboardPanel;
+use SilverStripe\ORM\FieldType\DBHTMLText;
 use DNADesign\Elemental\Models\BaseElement;
 
 class ElementAreaPanel extends DashboardPanel
@@ -33,8 +34,11 @@ class ElementAreaPanel extends DashboardPanel
                     $item->ID,
                 );
 
+                $icon = DBHTMLText::create();
+                $icon->setValue(trim($item->getIcon()->RAW()));
+
                 $list[] = [
-                    'icon' => trim($item->getIcon()->RAW()),
+                    'icon' => $icon,
                     'title' => $item->Title,
                     'link' => $item->CMSEditLink(),
                     'author' => $lastversion->Author()
