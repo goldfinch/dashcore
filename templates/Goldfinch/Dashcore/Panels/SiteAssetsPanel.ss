@@ -15,5 +15,5 @@
   <% end_loop %>
 </ul>
 <% else %>
-<span class="text-muted">Blocks not found</span>
+<span class="text-muted">Assets not found</span>
 <% end_if %>

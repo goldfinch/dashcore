@@ -3,15 +3,15 @@
 namespace Goldfinch\Dashcore\Panels;
 
 use Carbon\Carbon;
+use Goldfinch\Dashboard\DashboardPanel;
 use ReflectionMethod;
+use SilverStripe\AssetAdmin\Forms\FileFormFactory;
+use SilverStripe\AssetAdmin\Forms\ImageFormFactory;
 use SilverStripe\Assets\File;
 use SilverStripe\Assets\Folder;
 use SilverStripe\ORM\ArrayList;
-use SilverStripe\ORM\FieldType\DBText;
-use Goldfinch\Dashboard\DashboardPanel;
-use SilverStripe\AssetAdmin\Forms\FileFormFactory;
-use SilverStripe\AssetAdmin\Forms\ImageFormFactory;
 use SilverStripe\ORM\FieldType\DBHTMLText;
+use SilverStripe\ORM\FieldType\DBText;
 
 class SiteAssetsPanel extends DashboardPanel
 {
@@ -40,15 +40,14 @@ class SiteAssetsPanel extends DashboardPanel
         foreach (
             File::get()
                 ->sort('LastEdited', 'DESC')
-                ->limit(10)
-            as $item
+                ->limit(10) as $item
         ) {
             if (get_class($item) === Folder::class) {
                 continue;
             }
 
-            if (!$item || !$item->exists()) {
-                return null;
+            if (! $item || ! $item->exists()) {
+                continue;
             }
 
             $lastversion = $item->get_latest_version(
@@ -81,12 +80,12 @@ class SiteAssetsPanel extends DashboardPanel
                 $fileSpecs = $r->invoke(new FileFormFactory(), $item);
             }
 
-            if (!$icon) {
+            if (! $icon) {
                 if ($item->getExtension() == 'svg') {
                     $icon = $item->getUrl();
                 } else {
                     $icon =
-                        'https://placehold.co/352x264/3b4960/FFF?font=open-sans&text=.' .
+                        'https://placehold.co/352x264/3b4960/FFF?font=open-sans&text=.'.
                         $item->getExtension();
                 }
             }
